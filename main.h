@@ -8,7 +8,7 @@ const uint8_t rows[rowsCount] = {39, 38, 37, 36, 35};
 
 const uint8_t columnsCount = 15;
 const uint8_t columns[columnsCount] = {34,33,32,31,30,29,28,27,26,25,13,14,15,16,17};
-
+                                    // c0 c1 c2 c3 c4 c5 c6 c7 c8 c9 10 11 12 13 14 
 struct Key {
   uint8_t row;
   uint8_t column;
@@ -20,15 +20,14 @@ const uint16_t LAYER_2                       = 2 | 0xA000;
 const uint16_t LAYER_3                       = 3 | 0xA000;
 const uint16_t LAYER_4                       = 4 | 0xA000;
 const uint16_t LAYER_5                       = 5 | 0xA000;
-const uint16_t LAYER_2_3                     = 5 | 0xA000;
+const uint16_t LAYER_0CAPS                   = 6 | 0xA000;
+const uint16_t LAYER_MIRROR                  = 7 | 0xA000;
+const uint16_t LAYER_GAME                    = 8 | 0xA000;
+//const uint16_t                             = 9 | 0xA000;
 
-const uint16_t KEY_PLAY_PAUSE                = 7 | 0xA000;
-const uint16_t KEY_VOL_UP                    = 8 | 0xA000;
-const uint16_t KEY_VOL_DOWN                  = 9 | 0xA000;
-
-const uint16_t KEY_NULL                      = 10 | 0xA000;
-
-const uint16_t KEY_RELEASE                   = 11 | 0xA000;
+const uint16_t KEY_RELEASE                   = 14 | 0xA000;
+const uint16_t KEY_SET0                      = 15 | 0xA000;
+const uint16_t KEY_NULL                      = 16 | 0xA000;
 
 const uint16_t KEY_EXCLAMATION               = 17 | 0xA000; // !
 const uint16_t KEY_AT                        = 18 | 0xA000; // @
@@ -64,9 +63,17 @@ const uint16_t KEY_NEXT                      = 48 | 0xA000;
 const uint16_t KEY_RW                        = 49 | 0xA000;
 const uint16_t KEY_FF                        = 50 | 0xA000;
 const uint16_t KEY_REC                       = 51 | 0xA000;
+const uint16_t KEY_REBOOT                    = 52 | 0xA000;
+const uint16_t KEY_ALTx                      = 53 | 0xA000;
+const uint16_t KEY_ALTy                      = 54 | 0xA000;
+const uint16_t KEY_GM0                       = 55 | 0xA000;
+const uint16_t KEY_GM1                       = 56 | 0xA000;
+const uint16_t MOUSE_LCLICK                  = 57 | 0xA000;
+const uint16_t KEY_PLAY_PAUSE                = 58 | 0xA000;
+const uint16_t KEY_VOL_UP                    = 59 | 0xA000;
+const uint16_t KEY_VOL_DOWN                  = 60 | 0xA000;
 
 
-const uint16_t KEY_BACKTICK                  = KEY_TILDE;
 const uint16_t KEY_LEFT_BRACKET              = KEY_LEFT_BRACE;
 const uint16_t KEY_RIGHT_BRACKET             = KEY_RIGHT_BRACE;
 

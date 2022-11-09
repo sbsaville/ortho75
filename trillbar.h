@@ -19,17 +19,23 @@ int trillNumTouches = 0;
 int trillSize = 0;
 int trillSizeAdjusted = 0;
 float holdCounter = 0;
+float holdCounter2 = 0;
 float pressCounter = 0;
 int trillDual = 0;
+int s = 0;
 
 int val1 = 0;
 int prev1;
+int diff1;
 int valD = 0;
 int prevD;
+int diffD;
 int val2 = 0;
 int prev2;
+int diff2;
 int val3 = 0;
 int prev3;
+int diff3;
 
 class trillbar {
 public:
@@ -52,126 +58,196 @@ void trillbar::loop() {
   
   prev1 = val1;                               // saves previous values to compare them to current ones
   val1 = trillAdjusted;
+  diff1 = val1 - prev1;
   prevD = valD;
   valD = trillDual;
+  diffD = valD - prevD;
   prev2 = val2;
   val2 = trillAdjusted2;
+  diff2 = val2 - prev2;
   prev3 = val3;
   val3 = trillAdjusted3;
+  diff3 = val3 - prev3;
 
-  if(trillSensor.getNumTouches() > 0) {                               // must contain all trill operatons
-    holdCounter = holdCounter + 1;                                    // starts a counter to be used to prevent initial touches from triggering an operation
-      for(int i = 0; i < trillSensor.getNumTouches(); i++) {
-        Serial.print(pressCounter);
-        Serial.print(" ");
-        Serial.print(holdCounter);
-        Serial.print(" ");
-        Serial.print(trillSensor.getNumTouches());
-        Serial.print(" ");
-        Serial.print(trillSensor.touchLocation(i));
-        Serial.print(" ");
-        Serial.print(trillSensor.touchSize(i));
-        Serial.print(" ");
+  if(trillSensor.getNumTouches() > 0) {                               
+    
+      for(int t = 0; t < trillSensor.getNumTouches(); t++) {
         trillNumTouches = trillSensor.getNumTouches();
-        trillLocation = trillSensor.touchLocation(i);
-        trillAdjusted = trillLocation / trillSens;
+        trillLocation = trillSensor.touchLocation(t);
         trillAdjusted2 = trillLocation / trillSens2;
         trillAdjusted3 = trillLocation / trillSens3;
-        trillSize = trillSensor.touchSize(i);
-        Serial.print(trillAdjusted);
-        Serial.print(" ");
+        trillSize = trillSensor.touchSize(s);
         trillSizeAdjusted = trillSize / trillSizeSens;
-        Serial.print(trillSizeAdjusted);
-        Serial.print(" ");
-        trillDual = ((trillSensor.touchLocation(0) + trillSensor.touchLocation(1)) / 2) / trillSens2;
+        
+                                          // single touch section
 
         if(trillNumTouches == 1) {
+          trillAdjusted = trillLocation / trillSens;
           if(trillMode == 1) {
-            if (trillSizeAdjusted > 10 && trillSizeAdjusted <= 30) {
+            if (trillSizeAdjusted > 8 && trillSizeAdjusted <= 30) {
+//              Serial.println(diff1);
+              holdCounter2 = 0;
+              holdCounter = holdCounter + 1;                           // starts a counter to be used to prevent initial touches from triggering an operation
               if (holdCounter > 2) {
-                if (val1 > prev1) {
-                  Serial.println("left");
-                  Keyboard.press(KEY_LEFT);
-                  Keyboard.release(KEY_LEFT);
-                } 
-                else if (val1 < prev1) {
-                  Serial.println("right");
-                  Keyboard.press(KEY_RIGHT);
-                  Keyboard.release(KEY_RIGHT);
+                if (val1 > prev1 && val1 <= prev1 + 1) {
+                  for (int i=0; i<abs(diff1); i++) {
+                    Serial.println("left");
+                    Keyboard.press(KEY_LEFT);
+                    Keyboard.release(KEY_LEFT);
+                  } 
                 }
-              }
-            }
-            if (trillSizeAdjusted > 30 && trillSizeAdjusted <= 50) {
-              if (holdCounter > 2) {
-                if (val2 > prev2) {
-                  Serial.println("volume down");
-                  Keyboard.press(KEY_MEDIA_VOLUME_DEC);
-                  Keyboard.release(KEY_MEDIA_VOLUME_DEC);
-                } 
-                else if (val2 < prev2) {
-                  Serial.println("volume up");
-                  Keyboard.press(KEY_MEDIA_VOLUME_INC);
-                  Keyboard.release(KEY_MEDIA_VOLUME_INC);
+                else if (val1 > prev1 + 1 && val1 <= prev1 +2) {
+                  for (int i=0; i<abs(diff1); i++) {
+                    Serial.println("double left");
+                    Keyboard.press(KEY_LEFT);
+                    Keyboard.release(KEY_LEFT);
+                    Keyboard.press(KEY_LEFT);
+                    Keyboard.release(KEY_LEFT);
+                  }
+                }
+                else if (val1 > prev1 + 2) {
+                  for (int i=0; i<abs(diff1); i++) {
+                    Serial.println("triple left");
+                    Keyboard.press(KEY_LEFT);
+                    Keyboard.release(KEY_LEFT);
+                    Keyboard.press(KEY_LEFT);
+                    Keyboard.release(KEY_LEFT);
+                    Keyboard.press(KEY_LEFT);
+                    Keyboard.release(KEY_LEFT);
+                  }
+                }
+                else if (val1 < prev1 && val1 >= prev1 - 1) {
+                  for (int i=0; i<abs(diff1); i++) {
+                    Serial.println("right");
+                    Keyboard.press(KEY_RIGHT);
+                    Keyboard.release(KEY_RIGHT);
+                  }
+                }
+                else if (val1 < prev1 - 1 && val1 >= prev1 -2) {
+                  for (int i=0; i<abs(diff1); i++) {
+                    Serial.println("double right");
+                    Keyboard.press(KEY_RIGHT);
+                    Keyboard.release(KEY_RIGHT);
+                    Keyboard.press(KEY_RIGHT);
+                    Keyboard.release(KEY_RIGHT);
+                  }
+                }
+                else if (val1 < prev1 - 2) {
+                  for (int i=0; i<abs(diff1); i++) {
+                    Serial.println("triple right");
+                    Keyboard.press(KEY_RIGHT);
+                    Keyboard.release(KEY_RIGHT);
+                    Keyboard.press(KEY_RIGHT);
+                    Keyboard.release(KEY_RIGHT);
+                    Keyboard.press(KEY_RIGHT);
+                    Keyboard.release(KEY_RIGHT);
+                  }
                 }
               }
             }
           }
           else if(trillMode == 2) {
-            if (trillSizeAdjusted > 10) {
+            if (trillSizeAdjusted > 8) {
+              holdCounter = holdCounter + 1;
               if (holdCounter > 2) {
-                if (val1 != prev1) {
-                  Serial.println("space");
-                  Keyboard.press(KEY_SPACE);
-                  Keyboard.release(KEY_SPACE);
+                if (val2 > prev2) {
+                  for (int i=0; i<abs(diff2); i++) {
+                    Serial.println("volume down");
+                    Keyboard.press(KEY_MEDIA_VOLUME_DEC);
+                    Keyboard.release(KEY_MEDIA_VOLUME_DEC);
+                  }
+                }
+                else if (val2 < prev2) {
+                  for (int i=0; i<abs(diff2); i++) {
+                    Serial.println("volume up");
+                    Keyboard.press(KEY_MEDIA_VOLUME_INC);
+                    Keyboard.release(KEY_MEDIA_VOLUME_INC);
+                  }
                 }
               }
             }
           }
           else if (trillMode == 3) {
-            if (trillSizeAdjusted > 10) {
+            if (trillSizeAdjusted > 8) {
+              holdCounter = holdCounter + 1;
               if (holdCounter > 2) {
-                if (val3 > prev3) {
-                  Serial.println("scroll down");
-                  Mouse.scroll(-3);
-                } 
-                else if (val3 < prev3) {
-                  Serial.println("scroll up");
-                  Mouse.scroll(+3);
+                if (val3 > prev3 && val3 <= prev3 + 1) {
+                  for (int i=0; i<abs(diff3); i++) {
+                    Serial.println("scroll down");
+                    Mouse.scroll(-1);
+                  }
+                }
+                else if (val3 > prev3 + 1 && val3 <= prev3 + 2) {
+                  for (int i=0; i<abs(diff3); i++) {
+                    Serial.println("scroll down");
+                    Mouse.scroll(-2);
+                  }
+                }
+                else if (val3 > prev3 + 2) {
+                  for (int i=0; i<abs(diff3); i++) {
+                    Serial.println("scroll down");
+                    Mouse.scroll(-3);
+                  }
+                }
+                else if (val3 < prev3 && val3 >= prev3 - 1) {
+                  for (int i=0; i<abs(diff3); i++) {
+                    Serial.println("scroll up");
+                    Mouse.scroll(+1);
+                  }
+                }
+                else if (val3 < prev3 - 1 && val3 >= prev3 - 2) {
+                  for (int i=0; i<abs(diff3); i++) {
+                    Serial.println("scroll up");
+                    Mouse.scroll(+2);
+                  }
+                }
+                else if (val3 < prev3 - 2) {
+                  for (int i=0; i<abs(diff3); i++) {
+                    Serial.println("scroll up");
+                    Mouse.scroll(+3);
+                  }
                 }
               }
             }
           }
         }
-          
-        else if(trillNumTouches == 2) {
-          if (trillSizeAdjusted > 10) {
-            if (holdCounter > 2) {
-              if (valD > prevD) {
+                                             // dual touch volume adjustment
+
+        else if(trillNumTouches == 2 && trillSizeAdjusted > 8 || trillNumTouches == 1 && trillSizeAdjusted > 30 && trillSizeAdjusted <= 50 ) {
+          trillDual = ((trillSensor.touchLocation(0) + trillSensor.touchLocation(1)) / 2) / trillSens2;
+          holdCounter = 0;
+          holdCounter2 = holdCounter2 + 1;
+          if (holdCounter2 > 4) {
+            if (valD > prevD) {
+              for (int d=0; d<abs(diffD); d++) {
                 Serial.println("volume down");
                 Keyboard.press(KEY_MEDIA_VOLUME_DEC);
                 Keyboard.release(KEY_MEDIA_VOLUME_DEC);
-              } 
-              else if (valD < prevD) {
+              }
+            }
+            else if (valD < prevD) {
+              for (int d=0; d<abs(diffD); d++) {
                 Serial.println("volume up");
                 Keyboard.press(KEY_MEDIA_VOLUME_INC);
                 Keyboard.release(KEY_MEDIA_VOLUME_INC);
-             }
+              }
             }
           }
         }
-        else if(trillNumTouches == 3) {
+        else if(trillNumTouches == 3 || trillSizeAdjusted >= 50) {
           pressCounter = pressCounter + 1;
+          Serial.println(pressCounter);
         }
-        
-    }
-    Serial.println("");
-    touchActive = true;
-   delay(5);                                   // sets polling rate of trill
+      
+      }
+      touchActive = true;
+      delay(1);                                   // sets polling rate of trill
   }
   else if(touchActive) {
-    Serial.println("0 0");
+//    Serial.println("0 0");
     touchActive = false;
     holdCounter = 0;
+    holdCounter2 = 0;
     if (pressCounter > 1 && pressCounter < 35) {
       Keyboard.press(KEY_MEDIA_PLAY_PAUSE);
       Keyboard.release(KEY_MEDIA_PLAY_PAUSE);
